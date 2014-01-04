@@ -1,0 +1,7 @@
+= provide :title, 'All Users'
+= provide :separator, 'on'
+%h2 All Users
+= will_paginate
+%ul.users
+  = render @users
+= will_paginate

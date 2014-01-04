@@ -1,0 +1,7 @@
+= provide :title, 'Profile Settings'
+%h2 Profile
+.row
+  .span6.offset3
+    = render 'user_form', user: @user, submit_text: 'Save changes'
+    = gravatar_for @user
+    = link_to 'Change picture', 'http://gravatar.com/emails', target: '_blank'
