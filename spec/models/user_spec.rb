@@ -216,5 +216,73 @@ describe User do
       
     end
   end
+
+  describe "relationships -" do
+    it "should have the appropriate attributes and methods" do
+      expect(@user).to respond_to(:relationships)
+      expect(@user).to respond_to(:followed_users)
+      expect(@user).to respond_to(:following?)
+      expect(@user).to respond_to(:follow!)
+      expect(@user).to respond_to(:unfollow!)
+      expect(@user).to respond_to(:reverse_relationships)
+      expect(@user).to respond_to(:followers)
+    end
+    
+    describe "following" do
+      let(:other_user) { FactoryGirl.create(:user) }
+      before do
+        @user.save
+        @user.follow!(other_user)
+      end
+      
+      it "should include followed user in current user's group of followed users" do
+        expect(@user).to be_following(other_user)
+        expect(@user.followed_users).to include(other_user)
+        expect(other_user.followers).to include(@user)
+      end
+      
+      describe "and unfollowing" do
+        before { @user.unfollow!(other_user) }
+        
+        it "should remove other user from the current user's followed list" do
+          expect(@user).to_not be_following(other_user)
+          expect(@user.followed_users).to_not include(other_user)
+          expect(other_user.followers).to_not include(@user)
+        end
+      end
+      
+    end
+    
+    describe "associations" do
+      before do
+        @follower = FactoryGirl.create(:user)
+        @followed = FactoryGirl.create(:user)
+        @follower.relationships.create(followed_id: @followed.id)
+      end
+      
+      it "should destroy relationships when following users are destroyed" do
+        relationships = @follower.relationships.to_a
+        @follower.destroy
+        expect(relationships).to_not be_empty
+        relationships.each do |r|
+          expect do
+            Relationship.find(r)
+          end.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      it "should destroy relationships when followed users are destroyed" do
+        relationships = @follower.relationships.to_a
+        @followed.destroy
+        expect(relationships).to_not be_empty
+        relationships.each do |r|
+          expect do
+            Relationship.find(r)
+          end.to raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+      
+    end
+  end
   
 end
