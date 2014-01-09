@@ -121,6 +121,20 @@ describe "<AuthenticationPages>: " do
         specify { expect(response).to redirect_to(signin_path)}
       end
       
+      describe "viewing the following page" do
+        before { visit following_user_path(user) }
+        it "should redirect to the signin page" do
+          expect(page).to have_title('Sign In')
+        end
+      end
+      
+      describe "viewing the followers page" do
+        before { visit followers_user_path(user) }
+        it "should redirect to the signin page" do
+          expect(page).to have_title('Sign In')
+        end
+      end
+      
       describe "in the Microposts controller" do
         describe "submitting a POST request to Micropost#create action" do
           before { post microposts_path }
@@ -174,7 +188,6 @@ describe "<AuthenticationPages>: " do
         end
       end    
     end
-    
     
     describe "as the wrong user" do
       let(:other_user) { FactoryGirl.create(:user, email: 'other@example.com') }

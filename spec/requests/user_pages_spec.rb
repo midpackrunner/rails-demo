@@ -192,4 +192,46 @@ describe "<User pages>: " do
       end
     end
   end
+
+  describe "following/followers" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:other_user) { FactoryGirl.create(:user) }
+    before { user.follow!(other_user) }
+    
+    describe "followed users" do
+      before do
+       start_session user
+       visit following_user_path(user) 
+      end
+      
+      it "should land on the correct page" do
+        expect(page).to have_title(site_title('Following'))
+        expect(page).to have_selector('h3', text: 'Following')
+      end
+      
+      it 'should contain links to users followed' do
+        expect(page).to have_link(other_user.name, href: user_path(other_user))
+      end
+      
+    end
+    
+    describe "followers" do
+      before do
+        start_session other_user
+        visit followers_user_path(other_user)
+      end
+      
+      it 'should land on the correct page' do
+        expect(page).to have_title(site_title('Followers'))
+        expect(page).to have_selector('h3', text: 'Followers')
+      end
+      
+      it 'should contain links to users following' do
+        expect(page).to have_link(user.name, href: user_path(user))
+      end
+      
+    end
+    
+  end
+  
 end

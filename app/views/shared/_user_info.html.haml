@@ -1,4 +1,5 @@
-= link_to gravatar_for( current_user, size: 52 ), current_user
-%h2= current_user.name
-%span= link_to 'view my profile', current_user
-%span= pluralize( current_user.microposts.count, 'micropost' )
+- user ||= current_user
+= link_to gravatar_for( user, size: 52 ), user
+%h2= user.name
+%span= link_to 'view my profile', user
+%span= pluralize( user.microposts.count, 'micropost' )
