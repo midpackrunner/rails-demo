@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_action :find_user, only: [:destroy, :show, :edit, :update]
-  before_action :signed_in_user, only: [:index, :edit, :update]
+  before_action :find_user, only: [:destroy, :show, :edit, :update, :following, :followers]
+  before_action :signed_in_user, only: [:index, :edit, :update, :following, :followers]
   before_action :before_update_user, only: [:update]
   before_action :before_edit_user, only: [:edit]
   before_action :before_destroy_user, only: [:destroy]
@@ -46,6 +46,18 @@ class UsersController < ApplicationController
       flash.now[:error] = "Oops! Please check your profile settings below, then save again."
       render 'edit'
     end
+  end
+  
+  def following
+    @title = 'Following'
+    @users = @user.followed_users.paginate(page: params[:page])
+    render 'show_follow'
+  end
+  
+  def followers
+    @title = 'Followers'
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
   
 private
