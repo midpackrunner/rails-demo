@@ -169,6 +169,10 @@ describe User do
       
     end
   end
+  ##
+  # End NB
+  ##
+  
 
   describe "microposts -" do
     it "should be associated with microposts" do
@@ -206,9 +210,13 @@ describe User do
                              content: 'noseeum')
         end
         
+        let(:followed_user) { FactoryGirl.create(:user) }
+        let(:followed_post) { FactoryGirl.create(:micropost, user: followed_user, content: random_string(length: 8)) }
+        
+        before { @user.follow!(followed_user) }
+        
         specify 'feed should only include posts from current/followed users' do
-          expect(@user.feed).to include(older_post)
-          expect(@user.feed).to include(newer_post)
+          expect(@user.feed).to include(older_post, newer_post, followed_post)
           expect(@user.feed).to_not include(unfollowed_post)
         end
         
