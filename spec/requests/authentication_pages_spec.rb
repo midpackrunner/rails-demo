@@ -147,6 +147,18 @@ describe "<AuthenticationPages>: " do
         end
       end
       
+      describe 'in the Relationships controller' do
+        describe 'submitting to the create action' do
+          before { post relationships_path }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+        
+        describe 'submitting to the destroy action' do
+          before { delete relationship_path(1) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+      end
+      
     end
     
     describe "deleting users" do
@@ -175,18 +187,17 @@ describe "<AuthenticationPages>: " do
       end    
     end
     
-    
     describe "as the wrong user" do
       let(:other_user) { FactoryGirl.create(:user, email: 'other@example.com') }
       before { start_session user,{ no_capybara: true } }
       
-      describe "submitting a GET request to Users#edit action" do
+      describe "submitting a GET request to edit action" do
         before { get edit_user_path(other_user) }
         specify { expect(response).to_not redirect_to(edit_user_path(other_user)) }
         specify { expect(response).to redirect_to(edit_user_path(user)) }
       end
       
-      describe "submitting a PATCH request to Users#update action" do
+      describe "submitting a PATCH request to update action" do
         before { patch user_path(other_user) }
         specify { expect(response).to redirect_to(root_url) }
       end

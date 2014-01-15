@@ -86,6 +86,65 @@ describe "<User pages>: " do
       end
     end
     
+    describe 'follow/unfollow buttons' do
+      let(:other) { FactoryGirl.create(:user) }
+      before do
+        start_session user
+        visit user_path(other)
+      end
+      
+      describe 'following a user' do
+        
+        it "should increase the current user's followed count" do
+          expect do
+            click_button 'Follow'
+          end.to change(user.followed_users, :count).by(1)
+        end
+        
+        it "should increase the other user's follower count" do
+          expect do
+            click_button 'Follow'
+          end.to change(other.followers, :count).by(1)
+        end
+        
+        describe 'toggling button action' do
+          before { click_button 'Follow' }
+          it 'should now be an unfollow button' do
+            expect(page).to have_xpath("//input[@value='Unfollow']")
+          end
+        end
+        
+      end # following a user
+      
+      describe 'unfollowing a user' do
+        before do
+          user.follow!(other)
+          visit user_path(other)
+        end
+        
+        it "should decrease the current user's followed count" do
+          expect do
+            click_button 'Unfollow'
+          end.to change(user.followed_users, :count).by(-1)
+        end
+        
+        it "should decrease the other user's follower count" do
+          expect do
+            click_button 'Unfollow'
+          end.to change(other.followers, :count).by(-1)
+        end
+        
+        describe 'toggling button action' do
+          before { click_button 'Unfollow' }
+          it 'should now be a Follow button' do
+            expect(page).to have_xpath("//input[@value='Follow']")
+          end
+        end
+        
+      end # unfollowing a user
+      
+    end # follow/unfollow buttons
+    
   end
   
   describe "Update profile page" do

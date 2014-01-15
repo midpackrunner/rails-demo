@@ -40,7 +40,11 @@ RailsDemo::Application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
-  config.force_ssl = true
+  ## NB: 
+  # Since this is a demo deployed to Heroku under a custom sub-domain, we'll disable SSL to remove
+  # the browser warning about a mismatched *.herokuapp.com security key. If this were a real site,
+  # we'd want to spring for a key and set this to true.
+  config.force_ssl = false
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
