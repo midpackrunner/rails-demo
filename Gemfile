@@ -38,6 +38,7 @@ gem 'princely', '1.4.1'
 gem 'bcrypt-ruby', '~> 3.1.2'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
+gem 'newrelic_rpm'
 
 group :doc do
   gem 'sdoc', '0.3.20', require: false

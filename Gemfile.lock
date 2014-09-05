@@ -111,6 +111,7 @@ GEM
     mini_portile (0.5.2)
     minitest (4.7.5)
     multi_json (1.8.2)
+    newrelic_rpm (3.9.3.241)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
     pg (0.15.1)
@@ -231,6 +232,7 @@ DEPENDENCIES
   jbuilder (= 1.0.2)
   jquery-rails (= 3.0.4)
   launchy
+  newrelic_rpm
   pg (= 0.15.1)
   princely (= 1.4.1)
   rails (= 4.0.2)
